@@ -17,12 +17,12 @@
                     <td>{{ item.title }}</td>
                     <td>{{item.author}}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary" v-on:click="">
-                            Доступна
+                        <button type="button" class="btn btn-outline-primary" v-on:click="changeBookAvailability(item.id)">
+                            {{ item.availability ? "Доступна" : "Выдана" }}
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-danger" v-on:click="">
+                        <button type="button" class="btn btn-outline-danger" v-on:click="deleteBook(item.id)">
                             Удалить
                         </button>
                     </td>
@@ -31,11 +31,11 @@
                 <!-- Строка с полями для добавления новой книги -->
                 <tr>
                     <th scope="row">Добавить</th>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
+                    <td><input type="text" class="form-control" v-model="title"></td>
+                    <td><input type="text" class="form-control" v-model="author"></td>
                     <td></td>
                     <td>
-                        <button type="button" class="btn btn-outline-success" v-on:click="">
+                        <button type="button" class="btn btn-outline-success" v-on:click="addBook()">
                             Добавить
                         </button>
                     </td>
@@ -53,7 +53,9 @@
         },
         data(){
             return{
-                books: []
+                books: [],
+                title: "",
+                author: "",
             }
         },
         methods: {
@@ -64,14 +66,22 @@
                 // save books 
                 this.books = response.data
             },
-            addBook(){
+            async addBook(){
+                let response = await axios.post('http://library.marinayv.beget.tech/api/book/add', {
+                    title : this.title,
+                    author : this.author
+                });
+                console.log(response.status);
+                this.loadBookList();
 
             },
-            deleteBook(id){
-
+            async deleteBook(id){
+                let response = await axios.get('http://library.marinayv.beget.tech/api/book/delete/' + id);
+                this.loadBookList();
             },
-            changeBookAvailability(id){
-
+           async changeBookAvailability(id){
+            let response = await axios.get('http://library.marinayv.beget.tech/api/book/change_availabilty/' + id);
+            this.loadBookList();
             }
         }
     }
