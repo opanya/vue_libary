@@ -11,7 +11,8 @@
                     <th scope="col">Действия</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-for="item in books">
+                {{ item }}
                 <tr>
                     <th scope="row">1</th>
                     <td>Война и мир</td>
@@ -51,9 +52,18 @@
             // Сразу после загрузки страницы подгружаем список книг и отображаем его
             this.loadBookList();
         },
+        data(){
+            return{
+                books: []
+            }
+        },
         methods: {
-            loadBookList(){
+          async  loadBookList(){
+                // get book list
+                let response = await axios.get('http://library.marinayv.beget.tech/api/book/all');
 
+                // save books 
+                this.books = response.data
             },
             addBook(){
 
