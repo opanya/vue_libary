@@ -11,12 +11,11 @@
                     <th scope="col">Действия</th>
                 </tr>
             </thead>
-            <tbody v-for="item in books">
-                {{ item }}
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Война и мир</td>
-                    <td>Л. Н. Толстой</td>
+            <tbody>
+                <tr v-for="item in books" :key = "item.id">
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.title }}</td>
+                    <td>{{item.author}}</td>
                     <td>
                         <button type="button" class="btn btn-outline-primary" v-on:click="">
                             Доступна
